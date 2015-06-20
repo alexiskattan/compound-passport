@@ -1,4 +1,4 @@
-## About
+## About test
 
 [PassportJS](http://passportjs.org) auth library integrated into CompoundJS. This package allows authentication without any extra coding - just configure and use.
 
