@@ -1,19 +1,62 @@
 {
-  "author": "Anatoliy Chakkaev <rpm1602@gmail.com>, modified by @yawetse, @dsiu",
-  "name": "compound-passport",
-  "description": "PassportJS integrated with CompoundJS",
-  "version": "0.0.9",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:com/1602/compound-passport.git"
+  "_args": [
+    [
+      "alexiskattan/compound-passport",
+      "C:\\Users\\michael\\Desktop\\oalla\\web"
+    ]
+  ],
+  "_from": "alexiskattan/compound-passport",
+  "_id": "compound-passport@0.0.9",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/compound-passport",
+  "_phantomChildren": {},
+  "_requested": {
+    "hosted": {
+      "directUrl": "https://raw.githubusercontent.com/alexiskattan/compound-passport/master/package.json",
+      "gitUrl": "git://github.com/alexiskattan/compound-passport.git",
+      "httpsUrl": "git+https://github.com/alexiskattan/compound-passport.git",
+      "shortcut": "github:alexiskattan/compound-passport",
+      "ssh": "git@github.com:alexiskattan/compound-passport.git",
+      "sshUrl": "git+ssh://git@github.com/alexiskattan/compound-passport.git",
+      "type": "github"
+    },
+    "name": null,
+    "raw": "alexiskattan/compound-passport",
+    "rawSpec": "alexiskattan/compound-passport",
+    "scope": null,
+    "spec": "github:alexiskattan/compound-passport",
+    "type": "hosted"
   },
-  "main": "lib/passport.js",
-  "engines": {
-    "node": ">= 0.6.x"
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "git://github.com/alexiskattan/compound-passport.git#235eaf8ad0bb3b47b3268e429841661bb6e4f6f5",
+  "_shasum": "0a46f8879714b9ebbdbae47d5b5b28094d155aa0",
+  "_shrinkwrap": null,
+  "_spec": "alexiskattan/compound-passport",
+  "_where": "C:\\Users\\michael\\Desktop\\oalla\\web",
+  "author": {
+    "email": "rpm1602@gmail.com",
+    "name": "Anatoliy Chakkaev"
   },
   "dependencies": {
     "yaml-js": ">= 0.0.2"
   },
+  "description": "PassportJS integrated with CompoundJS",
   "devDependencies": {},
-  "optionalDependencies": {}
+  "engines": {
+    "node": ">= 0.6.x"
+  },
+  "gitHead": "235eaf8ad0bb3b47b3268e429841661bb6e4f6f5",
+  "main": "lib/passport.js",
+  "name": "compound-passport",
+  "optionalDependencies": {},
+  "readme": "## About test\r\n\r\n[PassportJS](http://passportjs.org) auth library integrated into CompoundJS. This package allows authentication without any extra coding - just configure and use.\r\n\r\n## Setup\r\n**Step 1:** Install dependencies\r\n\r\nAdd `compound-passport`, `passport`, and any providers used to your `package.json` and run `npm install`. Remember to add the used Passport Strategies to your `package.json`, e.g. `passport-facebook`, `passport-github`, etc. -- see [PassportJS providers](http://passportjs.org/guide/providers/).\r\n\r\n**Step 2:** Configure\r\n\r\nPut the following configuration in ```config/passport.yml```.\r\n```yaml\r\ndevelopment:\r\n  baseURL: 'http://localhost:3000/'\r\n  logoutURL: 'http://localhost:3000/auth/'\r\n  local: true\r\n  google: true\r\n  github:\r\n    clientID: \"a8578b8dc47834908338\"\r\n    secret: \"d8107d7cd75fc8ee1f12cf1f38b3aa065c3ec2ac\"\r\n  linkedin:\r\n    apiKey: \"3s708f1uys4x\"\r\n    secret: \"p3iBqlybJ5WNTINv\"\r\nproduction:\r\n  baseURL: 'http://node-js.ru/'\r\n  logoutURL: 'http://node-js.ru/admin/'\r\n  github:\r\n    clientID: \"....\"\r\n    secret: \"....\"\r\n```\r\n\r\nTo separate configuration from code simply use \"process.env\" directly in the configuration file:\r\n\r\n```yaml\r\ndevelopment:\r\n  baseURL: 'http://localhost:3000/'\r\n  logoutURL: 'http://localhost:3000/auth/'\r\n  local: true\r\n  google: true\r\n  github:\r\n    clientId: \"process.env.GITHUB_API_KEY\"\r\n    secret: \"process.env.GITHUB_API_SECRET\"\r\n  linkedin:\r\n    apiKey: \"process.env.LINKEDIN_API_KEY\"\r\n    secret: \"process.env.LINKEDIN_API_SECRET\"\r\nproduction:\r\n  baseURL: 'http://node-js.ru/'\r\n  logoutURL: 'http://node-js.ru/admin/'\r\n  github:\r\n    clientID: \"....\"\r\n    secret: \"....\"\r\n```\r\n\r\nThe module will then automatically read environment variables and use those.\r\n\r\n**Step 3:** Add module\r\n\r\nAdd module to ```config/autoload.js```:\r\n\r\n```javascript\r\nmodule.exports = function() {\r\n    return [require('compound-passport')];\r\n};\r\n```\r\n\r\n\r\n## Use\r\n\r\nAll authentication routes starts with `/auth/PROVIDERNAME`\r\nJust visit `/auth/google` to sign in with google:\r\n\r\n    <% link_to('Sign in with google', '/auth/google') %>\r\n    <% link_to('Sign in with linkedin', '/auth/linkedin') %>\r\n    <% link_to('Sign in with github', '/auth/github') %>\r\n\r\nCallback urls:\r\n\r\n- GitHub: `/auth/github/callback`\r\n- LinkedIn: `/auth/linkedin/callback`\r\n\r\nLogout:\r\n\r\nProvide by `logout()` function from `passportjs`, see [passportjs#logout](http://passportjs.org/guide/logout/).\r\n\r\nEasily configurable in config.yml file, just add logout redirection url (default is '/'):\r\n\r\n```yaml\r\nlogoutURL: '/auth/'\r\n```\r\n\r\nExample before filter (describe in your application controller):\r\n\r\n```javascript\r\nbefore(function requireManager() {\r\n    if (!session.passport.user) {\r\n        req.session.redirect = req.path;\r\n        redirect('/auth/linkedin');\r\n    } else {\r\n        User.find(session.passport.user, function (err, user) {\r\n            if (user && user.email === 'my.email@somehost.tld') {\r\n                req.user = user;\r\n                next();\r\n            } else {\r\n                flash('error', 'You have no permission to access this area');\r\n                redirect('/');\r\n            }\r\n        });\r\n    }\r\n});\r\n```\r\n\r\n## MIT License\r\n\r\n```text\r\nCopyright (C) 2012 by Anatoliy Chakkaev <mail@anatoliy.in>\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n```\r\n\r\nThe above copyright notice and this permission notice shall be included in\r\nall copies or substantial portions of the Software.\r\n\r\n```text\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\r\nTHE SOFTWARE.\r\n```\r\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:com/1602/compound-passport.git"
+  },
+  "version": "0.0.9"
 }
